@@ -1,5 +1,5 @@
 const loginForm = document.querySelector("#login-form");
-const loginInput = loginForm.querySelector("input");
+const loginInput = document.querySelector("#login-form input");
 const greeting = document.querySelector("#greeting");
 // 똑같은 string을 반복해서 사용하는 경우에 변수로 지정(대문자가 관습)
 const HIDDEN_CLASSNAME = "hidden";
@@ -10,10 +10,10 @@ const onLoginSubmit = (event) => {
   loginForm.classList.add(HIDDEN_CLASSNAME);
   const username = loginInput.value;
   localStorage.setItem(USERNAME_KEY, username);
-  paintGreetings();
+  paintGreetings(username);
 };
 
-const paintGreetings = () => {
+const paintGreetings = (username) => {
   greeting.innerText = `Hello ${username}`;
   greeting.classList.remove(HIDDEN_CLASSNAME);
 };
@@ -24,5 +24,5 @@ if (savedUsername === null) {
   loginForm.classList.remove(HIDDEN_CLASSNAME);
   loginForm.addEventListener("submit", onLoginSubmit);
 } else {
-  paintGreetings();
+  paintGreetings(savedUsername);
 }
