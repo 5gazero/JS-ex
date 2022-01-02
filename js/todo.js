@@ -14,12 +14,15 @@ const deleteToDo = (event) => {
   // click에 대한 event
   const li = event.target.parentElement; // 클릭 된 element의 부모
   li.remove();
+  toDos = toDos.filter((toDo) => toDo.id !== parseInt(li.id)); // typeof li.id === string
+  saveToDos();
 };
 
 const paintToDo = (newTodo) => {
   const li = document.createElement("li");
+  li.id = newTodo.id;
   const span = document.createElement("span");
-  span.innerText = newTodo;
+  span.innerText = newTodo.text;
   const button = document.createElement("button");
   button.innerText = "🗑";
   button.addEventListener("click", deleteToDo);
@@ -32,8 +35,12 @@ const handleToDoSubmit = (event) => {
   event.preventDefault(); // 기본동작 제어
   const newTodo = toDoInput.value; // input으로 받은 값 변수에 할당
   toDoInput.value = ""; // input창 초기화
-  toDos.push(newTodo); // newTodo를 arr에 push
-  paintToDo(newTodo); // 화면에 newTodo 보여주기
+  const newTodoObj = {
+    text: newTodo,
+    id: Date.now(),
+  };
+  toDos.push(newTodoObj); // newTodoObj를 arr에 push
+  paintToDo(newTodoObj); // 화면에 newTodo 보여주기
   saveToDos(); // arr를 localStorage에 저장
 };
 
