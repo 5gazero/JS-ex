@@ -2,19 +2,21 @@ const toDoForm = document.getElementById("todo-form");
 const toDoInput = document.querySelector("#todo-form input");
 const toDoList = document.getElementById("todo-list");
 
-const toDos = [];
+const TODOS_KEY = "todos";
 
-function saveToDos() {
-  localStorage.setItem("todos", JSON.stringify(toDos));
-}
+let toDos = []; // update 가능
 
-function deleteToDo(event) {
+const saveToDos = () => {
+  localStorage.setItem(TODOS_KEY, JSON.stringify(toDos)); // 객체나 배열을 string으로
+};
+
+const deleteToDo = (event) => {
   // click에 대한 event
   const li = event.target.parentElement; // 클릭 된 element의 부모
   li.remove();
-}
+};
 
-function paintToDo(newTodo) {
+const paintToDo = (newTodo) => {
   const li = document.createElement("li");
   const span = document.createElement("span");
   span.innerText = newTodo;
@@ -24,15 +26,23 @@ function paintToDo(newTodo) {
   li.appendChild(span);
   li.appendChild(button);
   toDoList.appendChild(li);
-}
+};
 
-function handleToDoSubmit(event) {
+const handleToDoSubmit = (event) => {
   event.preventDefault(); // 기본동작 제어
   const newTodo = toDoInput.value; // input으로 받은 값 변수에 할당
   toDoInput.value = ""; // input창 초기화
   toDos.push(newTodo); // newTodo를 arr에 push
   paintToDo(newTodo); // 화면에 newTodo 보여주기
   saveToDos(); // arr를 localStorage에 저장
-}
+};
 
 toDoForm.addEventListener("submit", handleToDoSubmit);
+
+const savedToDos = localStorage.getItem(TODOS_KEY);
+
+if (savedToDos) {
+  const parsedToDos = JSON.parse(savedToDos); // string을 배열로
+  toDos = [...parsedToDos]; // 기존에 저장된 toDos 할당
+  parsedToDos.forEach(paintToDo);
+}
